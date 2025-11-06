@@ -1,9 +1,17 @@
-import React from 'react'
-
+import React from "react";
+import Banner from "../components/home/banner";
+import Hero from "../components/home/Hero";
+import Features from "../components/home/Features";
+import Testimonial from "../components/home/Testimonial";
 const Home = () => {
   return (
-    <div>Home Page</div>
-  )
-}
+    <div>
+      <Banner />
+      <Hero />
+      <Features/>
+      <Testimonial/>
+    </div>
+  );
+};
 
-export default Home
+export default Home;
