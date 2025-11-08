@@ -1,4 +1,4 @@
-import { Briefcase, Plus, Sparkle, Sparkles, Trash2 } from "lucide-react";
+import { Briefcase, Plus, Sparkles, Trash2 } from "lucide-react";
 import React from "react";
 
 const ExperienceForm = ({ data, onChange }) => {
@@ -35,8 +35,8 @@ const ExperienceForm = ({ data, onChange }) => {
         </div>
         <button
           onClick={addExperience}
-          className="flex items-center gap-2 px-3 py-1 text-sm bg-purple-100
-             text-purple-700 rounded hover:bg-purple-200 transition-colors"
+          className="flex items-center gap-2 px-3 py-1 text-sm bg-green-100
+             text-green-700 rounded hover:bg-green-200 rounded-lg transition-colors"
         >
           <Plus className="size-4" />
           Add Experience
