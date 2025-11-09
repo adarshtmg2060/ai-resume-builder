@@ -1,9 +1,9 @@
-import ImageKit from "@imagekit/nodejs";
-import dotenv from "dotenv";
-dotenv.config();
+import { ImageKit } from "@imagekit/nodejs";
+
 const imageKit = new ImageKit({
-    // publicKey: process.env.IMAGE_KIT_PUBLIC_KEY,
-    privateKey:  process.env.IMAGE_KIT_PRIVATE_KEY,
-    // urlEndpoint: process.env.IMAGE_KIT_URL_ENDPOINT,
-    });
+  publicKey: "public_mCeMHEZMEQTAHUhEQy74wc/tWDk=",
+  privateKey: "private_e4TEYWR7z8NTADUsoeteLRJo7EY=",
+  urlEndpoint: "https://ik.imagekit.io/x7xxa304at", // Required
+});
+
 export default imageKit;

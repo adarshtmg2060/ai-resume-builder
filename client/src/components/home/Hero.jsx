@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Hero = () => {
+  const { user } = useSelector((state) => state.auth);
+
   const [menuOpen, setMenuOpen] = React.useState(false);
 
   const logos = [
@@ -11,13 +14,14 @@ const Hero = () => {
     "https://saasly.prebuiltui.com/assets/companies-logo/huawei.svg",
     "https://saasly.prebuiltui.com/assets/companies-logo/walmart.svg",
   ];
+
   return (
     <>
       <div className="min-h-screen pb-20">
         {/* Navbar */}
         <nav className="z-50 flex items-center justify-between w-full py-4 px-6 md:px-16 lg:px-24 xl:px-40 text-sm">
           <a href="https://prebuiltui.com">
-                <img src="/logo.svg" alt="logo" className="h-11 w-auto"/>
+            <img src="/logo.svg" alt="logo" className="h-11 w-auto" />
           </a>
 
           <div className="hidden md:flex items-center gap-8 transition duration-500 text-slate-800">
@@ -27,10 +31,7 @@ const Hero = () => {
             <a href="#features" className="hover:textgreen-600 transition">
               Features
             </a>
-            <a
-              href="#testimonials"
-              className="hover:text-green-600 transition"
-            >
+            <a href="#testimonials" className="hover:text-green-600 transition">
               Testimonials
             </a>
             <a href="#cta" className="hover:text-green-600 transition">
@@ -40,16 +41,25 @@ const Hero = () => {
 
           <div className="flex gap-2">
             <Link
-              to='/app?state=register'
+              hidden={user}
+              to="/app?state=register"
               className="hidden md:block px-6 py-2 bg-green-500 hover:bg-green-700 active:scale-95 transition-all rounded-full text-white"
             >
               Get started
             </Link>
             <Link
-              to='/app?state=login'
+              hidden={user}
+              to="/app?state=login"
               className="hidden md:block px-6 py-2 border active:scale-95 hover:bg-slate-50 transition-all rounded-full text-slate-700 hover:text-slate-900"
             >
               Login
+            </Link>
+            <Link
+              to="/app"
+              className="hidden md:block px-8 py-2 bg-green-500 hover:bg-green-700 active:scale-95 transition-all rounded-full text-white"
+              hidden={!user}
+            >
+              Dashboard
             </Link>
           </div>
 
@@ -160,7 +170,7 @@ const Hero = () => {
 
           {/* Headline + CTA */}
           <h1 className="text-5xl md:text-6xl font-semibold max-w-5xl text-center mt-4 md:leading-[70px]">
-            Land Your dream job with {" "}
+            Land Your dream job with{" "}
             <span className=" bg-gradient-to-r from-green-700 to-green-600 bg-clip-text text-transparent text-nowrap">
               AI-powerd{" "}
             </span>{" "}
@@ -168,13 +178,14 @@ const Hero = () => {
           </h1>
 
           <p className="max-w-md text-center text-base my-7">
-             Create,edit and download professional resumes with AI-powerd assistance.
+            Create,edit and download professional resumes with AI-powerd
+            assistance.
           </p>
 
           {/* CTA Buttons */}
           <div className="flex items-center gap-4 ">
             <Link
-              to='/app'
+              to="/app"
               className="bg-green-500 hover:bg-green-600 text-white rounded-full px-9 h-12 m-1 ring-offset-2 ring-1 ring-green-400 flex items-center transition-colors"
             >
               Get started
