@@ -56,16 +56,16 @@ export const getResumeById = async (req, res) => {
     const userId = req.userId;
     const { resumeId } = req.params;
 
-    const resume = await Resume.findOne({ userId, _id: resumeId });
+    const resume = await Resume.findOne({ userId: userId, _id: resumeId });
+
     if (!resume) {
       return res.status(404).json({ message: "Resume not found" });
     }
-
     resume.__v = undefined; // hide __v field
     resume.createdAt = undefined; // hide createdAt field
     resume.updatedAt = undefined; // hide updatedAt field
 
-    // return resume
+    // // return resume
     return res.status(200).json({ resume });
   } catch (error) {
     console.error("Error in getting resume by ID:", error);

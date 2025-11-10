@@ -8,7 +8,6 @@ import {
   ChevronRight,
   DownloadIcon,
   EyeIcon,
-  EyeOff,
   EyeOffIcon,
   FileText,
   FolderIcon,
@@ -30,6 +29,7 @@ import SkillsForm from "../components/SkillsForm";
 import { useSelector } from "react-redux";
 import api from "../configs/api";
 import toast from "react-hot-toast";
+
 const ResumeBuilder = () => {
   const { resumeId } = useParams();
   const { token } = useSelector((state) => state.auth);
@@ -39,7 +39,7 @@ const ResumeBuilder = () => {
     title: "",
     personal_info: {},
     professional_summary: "",
-    experience: [],
+    experiences: [],
     education: [],
     project: [],
     skills: [],
@@ -53,9 +53,11 @@ const ResumeBuilder = () => {
       const { data } = await api.get("/api/resumes/get/" + resumeId, {
         headers: { Authorization: token },
       });
+
       if (data.resume) {
         setResumeData(data.resume);
         document.title = data.resume.title;
+        // console.log(data.resume);
       }
     } catch (error) {
       console.log(error.message);
@@ -68,17 +70,13 @@ const ResumeBuilder = () => {
   const sections = [
     { id: "personal", name: "Personal Info", icon: User },
     { id: "summary", name: "Summary", icon: FileText },
-    { id: "experience", name: "Experience", icon: Briefcase },
+    { id: "experiences", name: "Experience", icon: Briefcase },
     { id: "education", name: "Education", icon: GraduationCap },
     { id: "projects", name: "Projects", icon: FolderIcon },
     { id: "skills", name: "Skills", icon: Sparkles },
   ];
 
   const activeSection = sections[activeSectionIndex];
-
-  useEffect(() => {
-    loadExistingResume();
-  }, []);
 
   const changeResumeVisibility = async () => {
     // API call to change resume visibility
@@ -99,17 +97,12 @@ const ResumeBuilder = () => {
     }
   };
 
-  const handleShare = () => {
+  const handleShare = async () => {
     const frontendUrl = window.location.href.split("/app/")[0];
     const resumeUrl = `${frontendUrl}/view/${resumeId}`;
-    if (navigator.share) {
-      navigator.share({
-        url: resumeUrl,
-        text: "My Resume!",
-      });
-    } else {
-      alert("Share nor Supported on this browser");
-    }
+
+    // Open in a new tab
+    window.open(resumeUrl, "_blank");
   };
 
   const downloadResume = () => {
@@ -150,7 +143,6 @@ const ResumeBuilder = () => {
 
       setResumeData(data.resume);
       toast.success(data.message);
-      console.log(data.message);
     } catch (error) {
       console.error("Error saving resume:", error);
       const errorMessage =
@@ -158,6 +150,22 @@ const ResumeBuilder = () => {
       toast.error(errorMessage);
     }
   };
+
+  const goToNextSection = () => {
+    if (activeSectionIndex < sections.length - 1) {
+      setActiveSectionIndex(activeSectionIndex + 1);
+    }
+  };
+
+  const goToPreviousSection = () => {
+    if (activeSectionIndex > 0) {
+      setActiveSectionIndex(activeSectionIndex - 1);
+    }
+  };
+
+  useEffect(() => {
+    loadExistingResume();
+  }, []);
 
   return (
     <div>
@@ -210,11 +218,7 @@ const ResumeBuilder = () => {
                 <div className="flex items-center gap-2">
                   {/* Previous */}
                   <button
-                    onClick={() =>
-                      setActiveSectionIndex((prevIndex) =>
-                        Math.max(prevIndex - 1, 0)
-                      )
-                    }
+                    onClick={goToPreviousSection}
                     className="flex items-center gap-1 p-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all disabled:opacity-50"
                     disabled={activeSectionIndex === 0}
                   >
@@ -223,11 +227,7 @@ const ResumeBuilder = () => {
 
                   {/* Next */}
                   <button
-                    onClick={() =>
-                      setActiveSectionIndex((prevIndex) =>
-                        Math.min(prevIndex + 1, sections.length - 1)
-                      )
-                    }
+                    onClick={goToNextSection}
                     className="flex items-center gap-1 p-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all disabled:opacity-50"
                     disabled={activeSectionIndex === sections.length - 1}
                   >
@@ -265,13 +265,13 @@ const ResumeBuilder = () => {
                   />
                 )}
 
-                {activeSection.id === "experience" && (
+                {activeSection.id === "experiences" && (
                   <ExperienceForm
-                    data={resumeData.experience}
+                    data={resumeData.experiences}
                     onChange={(data) =>
                       setResumeData((prev) => ({
                         ...prev,
-                        experience: data,
+                        experiences: data,
                       }))
                     }
                   />
@@ -335,15 +335,15 @@ const ResumeBuilder = () => {
                   <button
                     onClick={handleShare}
                     className="flex items-center p-2 px-4 gap-2 text-xs bg-gradient-to-br from-blue-100 to-blue-200 text-blue-600 
-                      rounded-lg ring-blue-300 hover:ring transition-all"
+                       rounded-lg ring-blue-300 hover:ring transition-all"
                   >
-                    <Share2Icon className="size-4 " />
+                    <EyeIcon className="size-4 " />
                   </button>
                 )}
                 <button
                   onClick={changeResumeVisibility}
                   className="flex items-center p-2 px-4 gap-2 text-xs bg-gradient-to-br from-purple-100 to-purple-200
-                  text-purple-600 rounded-lg ring-purple-300 hover:ring transition-all"
+                   text-purple-600 rounded-lg ring-purple-300 hover:ring transition-all"
                 >
                   {resumeData.public ? (
                     <EyeIcon className="size-4" />
@@ -355,9 +355,9 @@ const ResumeBuilder = () => {
                 <button
                   onClick={downloadResume}
                   className="flex items-center gap-2 px-6 py-2 text-xs
-                   bg-gradient-to-br from-green-100 to-green-200
-                    text-green-600 rounded-lg ring-green-300 hover:ring
-                     transition-colors"
+                    bg-gradient-to-br from-green-100 to-green-200
+                     text-green-600 rounded-lg ring-green-300 hover:ring
+                      transition-colors"
                 >
                   <DownloadIcon className="size-4" />
                   Download
