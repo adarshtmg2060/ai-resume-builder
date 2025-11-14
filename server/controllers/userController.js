@@ -2,9 +2,10 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import Resume from "../models/Resume.js";
+import { config } from "../configs/app.config.js";
 
 const generateToken = (userId) => {
-  const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ userId }, config.JWT_SECRET, {
     expiresIn: "7d",
   });
   return token;

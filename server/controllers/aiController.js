@@ -1,6 +1,6 @@
 import Resume from "../models/Resume.js";
 import ai from "../configs/ai.js";
-
+import { config } from "../configs/app.config.js";
 export const enhanceProfessionalSummary = async (req, res) => {
   try {
     const { userContent } = req.body;
@@ -10,7 +10,7 @@ export const enhanceProfessionalSummary = async (req, res) => {
     }
 
     const response = await ai.chat.completions.create({
-      model: "gemini-2.0-flash",
+      model: config.OPENAI_MODEL,
       messages: [
         {
           role: "system",
@@ -44,7 +44,7 @@ export const enhanceJobDescription = async (req, res) => {
       return res.status(400).json({ message: "User content is required" });
     }
     const response = await ai.chat.completions.create({
-      model: "gemini-2.0-flash",
+      model: config.OPENAI_MODEL,
       messages: [
         {
           role: "system",
@@ -123,7 +123,7 @@ export const uploadResume = async (req, res) => {
     }`;
 
     const response = await ai.chat.completions.create({
-      model: "gemini-2.0-flash",
+      model: config.OPENAI_MODEL,
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },

@@ -1,17 +1,16 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import dotenv from "dotenv";
 import connectDB from "./configs/db.js";
+import { config } from "./configs/app.config.js";
 
 // routes imports
 import userRoutes from "./routes/userRoutes.js";
 import resumeRouter from "./routes/resumeRoute.js";
 import aiRouter from "./routes/aiRoute.js";
-dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = config.PORT || 5000;
 
 // Database connection
 await connectDB();
